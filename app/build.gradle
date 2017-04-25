@@ -1,0 +1,84 @@
+apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
+
+android {
+    compileSdkVersion 25
+    buildToolsVersion "25.0.2"
+
+    dexOptions {
+        preDexLibraries true
+        maxProcessCount 8
+    }
+
+    defaultConfig {
+        applicationId "io.kaeawc.fragmentexperiments"
+        minSdkVersion 16
+        targetSdkVersion 25
+        versionCode 1
+        versionName "1.0"
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+    }
+    buildTypes {
+        debug {
+            debuggable true
+            minifyEnabled false
+            testCoverageEnabled true
+        }
+        release {
+            debuggable false
+            minifyEnabled false
+            zipAlignEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    productFlavors {
+        beta {
+            minSdkVersion 21
+            resConfigs "en", "xxhdpi"
+        }
+        store {
+        }
+    }
+
+    testOptions {
+        unitTests.returnDefaultValues = true
+        unitTests.all {
+            // All the usual Gradle options.
+            jvmArgs '-noverify'
+            testLogging {
+                events "passed", "skipped", "failed", "standardOut", "standardError"
+                outputs.upToDateWhen { false }
+                showStandardStreams = true
+            }
+        }
+    }
+
+    aaptOptions {
+        // Needs to be manually set to true for release builds
+        cruncherEnabled false
+    }
+
+    lintOptions {
+        abortOnError true
+        checkReleaseBuilds false
+        absolutePaths false
+        checkAllWarnings true
+        warning 'InvalidPackage'
+    }
+}
+
+dependencies {
+
+    compile deps.kotlin
+    compile deps.appCompat
+    compile deps.design
+    compile deps.constraintLayout
+    compile deps.timber
+
+    testCompile deps.junit
+}
+repositories {
+    mavenCentral()
+}
